@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="Style/game.css" />
+    <title>Game</title>
+  </head>
+  <body>
+    <h2>Memory Game</h2>
+
+    <!-- Wrap Moves & Lives inside a div -->
+    <div class="top-menu">
+      <div class="life">Life: <span id="lifeCounter">5</span></div>
+      <div class="moves">Moves: <span id="movesCounter">0</span></div>
+    </div>
+
+    <div class="game-board" id="gameBoard"></div>
+
+    <!--Bottom menu-->
+    <div class="bottom-menu">
+      <div class="setting" id="settingsButton">Setting</div>
+      <div class="profil" id="profilButton">Profil</div>
+    </div>
+
+    <!-- Hidden Settings Window -->
+    <div class="modal-window settings-window" id="settingsWindow">
+      <h2>Settings</h2>
+      <p>Here you can change settings.</p>
+      <button id="closeSettings">Close</button>
+    </div>
+
+    <!--Hidden Profil window-->
+
+    <div class="modal-window profil-window" id="profilWindow">
+      <h2>Profil billede</h2>
+      <p>Navn</p>
+      <p>Lager</p>
+      <button id="closeProfil">Close</button>
+    </div>
+
+    <script>
+      // Game setup
+      const cardsArray = [
+        "🐧",
+        "🐧",
+        "🐱",
+        "🐱",
+        "🐶",
+        "🐶",
+        "🦊",
+        "🦊",
+        "🐸",
+        "🐸",
+        "🦁",
+        "🦁",
+        "🐰",
+        "🐰",
+        "🐢",
+        "🐢",
+      ];
+      let shuffledCards = cardsArray.sort(() => Math.random() - 0.5); // Shuffle cards randomly
+      let gameBoard = document.getElementById("gameBoard");
+      let movesElement = document.getElementById("movesCounter"); // Fix missing element
+      let lifeElement = document.getElementById("lifeCounter");
+      let flippedCards = [];
+      let matchedPairs = 0;
+      let moves = localStorage.getItem("moves")
+        ? parseInt(localStorage.getItem("moves"))
+        : 0;
+      let life = localStorage.getItem("life")
+        ? parseInt(localStorage.getItem("life"))
+        : 5;
+
+      document.getElementById("lifeCounter").textContent = life;
+      document.getElementById("movesCounter").textContent = moves;
+
+      // Loop to create card elements
+      shuffledCards.forEach((emoji, index) => {
+        let card = document.createElement("div");
+        card.classList.add("card", "hidden");
+        card.dataset.index = index;
+        card.dataset.emoji = emoji;
+        card.innerText = "";
+        card.addEventListener("click", flipCard);
+        gameBoard.appendChild(card);
+      });
+
+      // Update life every 5 moves
+      function flipCard(event) {
+        let selectedCard = event.target;
+
+        if (
+          flippedCards.length < 2 &&
+          selectedCard.classList.contains("hidden")
+        ) {
+          selectedCard.classList.remove("hidden");
+          selectedCard.innerText = selectedCard.dataset.emoji;
+          flippedCards.push(selectedCard);
+        }
+
+        if (flippedCards.length === 2) {
+          moves++;
+          document.getElementById("movesCounter").textContent = moves;
+          localStorage.setItem("moves", moves);
+          setTimeout(checkMatch, 800);
+        }
+
+        if (moves > 0 && moves % 5 === 0) {
+          decreaseLife();
+        }
+      }
+
+      // Function to update and sync life
+      function updateLife() {
+        document.getElementById("lifeCounter").textContent = life;
+        localStorage.setItem("life", life); // Save to localStorage
+      }
+
+      function decreaseLife() {
+        if (life > 0) {
+          life--;
+          localStorage.setItem("life", life);
+          lifeElement.textContent = life;
+        }
+
+        if (life === 0) {
+          alert("Game Over! Wait for a life to regenerate."); // Reset timer
+          localStorage.setItem("life", life);
+          localStorage.removeItem("moves"); // Reset moves
+          localStorage.setItem("lifeDepletedAt", Date.now()); // Store the time when life hit 0
+          window.location.href = "main.html"; // Redirect to main menu
+        }
+      }
+
+      function checkMatch() {
+        if (flippedCards.length < 2) return; // Ensure there are exactly two cards
+
+        if (flippedCards[0]?.dataset.emoji === flippedCards[1]?.dataset.emoji) {
+          flippedCards = [];
+          matchedPairs++;
+
+          if (matchedPairs === cardsArray.length / 2) {
+            setTimeout(() => {
+              alert(`Game Over! Moves: ${moves}`);
+              location.reload();
+            }, 500);
+          }
+        } else {
+          setTimeout(() => {
+            // Add delay for better UX
+            flippedCards.forEach((card) => {
+              card.classList.add("hidden");
+              card.innerText = "";
+            });
+            flippedCards = [];
+          }, 500);
+        }
+      }
+
+      // setting
+      document
+        .getElementById("settingsButton")
+        .addEventListener("click", function () {
+          document.getElementById("settingsWindow").style.display = "block";
+        });
+
+      document
+        .getElementById("closeSettings")
+        .addEventListener("click", function () {
+          document.getElementById("settingsWindow").style.display = "none";
+        });
+
+      // profil
+      document
+        .getElementById("profilButton")
+        .addEventListener("click", function () {
+          document.getElementById("profilWindow").style.display = "block";
+        });
+
+      document
+        .getElementById("closeProfil")
+        .addEventListener("click", function () {
+          document.getElementById("profilWindow").style.display = "none";
+        });
+    </script>
+  </body>
+</html>

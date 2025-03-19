@@ -1,0 +1,94 @@
+.container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
+    grid-template-rows: repeat(4, 1fr); /* 4 equal rows */
+    gap: 10px; /* Space between grid items */
+    background-color: blueviolet;
+    width: 100%;
+    max-width: 500px;
+    height: 500px; /* Set a fixed height */
+    margin: 10vh auto 0 auto; /* Centering horizontally */
+    padding: 0 10px; 
+}
+
+.menu{
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    grid-column: span 5;
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.button{
+    padding: 10px 20px;
+    background-color: lightcoral;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.bottom{
+    background-color: brown;
+    grid-area: 4 / 1 / span 1 / end;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between; /* Space elements evenly */
+    gap: 10px; /* Optional: Space between items */
+}
+    
+
+.venner, .profil {
+    flex: 1; /* Makes both divs take equal width */
+    padding: 20px;
+    text-align: center;
+    background-color: rgb(44, 135, 44);
+    border-radius: 5px;
+}
+
+
+
+
+.modal-window{
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+.settings-window button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.map{
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    grid-template-rows: 33% 33% 33%;
+    gap: 3px;
+    justify-content: space-evenly;
+    background: lightblue;
+    padding: 20px;
+    grid-area: 2 / 1 / span 2 / end;
+}
+.map div{
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 20px 0;
+    font-size: 20px;
+}
+.settings-menu button{
+    background-color: blueviolet;
+    color: aliceblue;
+}
+

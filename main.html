@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Style/main.css">
+    <title>Main menu</title>
+</head>
+<body>
+    <div class="container">
+        <ul class="menu">
+            <li class="button">Life: <span id="lifeCounter">5</span></li>
+            <li class="button" id="scoreButton">Score</li>
+            <li class="button"  id="settingsButton">Setting</li>
+        </ul>
+        <div class="map">
+            <a href="game.html"><div>1</div></a>
+            <div>2</div>
+            <div>3</div>
+            <div>4</div>
+            <div>5</div>
+            <div>6</div>
+            <div>7</div>
+            <div>8</div>
+            <div>9</div>
+        </div>
+        <div class="bottom"> 
+            <div class="profil" id="profilButton">Profil</div>
+            <div class="venner" id="vennerButton">Venner</div>
+        </div>
+    </div>
+    
+    
+
+    <!--Hidden Score window-->
+
+    <div class="modal-window score-window" id="scoreWindow">
+        <h2>Score</h2>
+        <p>Here you can see score.</p>
+        <button id="closeScore">Close</button>
+    </div>
+
+    <!-- Hidden Settings Window -->
+    <div class="modal-window settings-window" id="settingsWindow">
+        <h2>Settings</h2>
+        <div class="settings-menu">
+            <button id="stopMusic">Music</button>
+        <button id="stopSound">Sounds</button>
+        <button id="infoGame">Info</button>
+        </div>
+        <button id="closeSettings">Close</button>
+    </div>
+    
+    <!--Hidden Profil window-->
+
+    <div class="modal-window profil-window" id="profilWindow">
+        <h2>Profil billede</h2>
+        <p>Navn</p>
+        <p>Lager</p>
+        <button id="closeProfil">Close</button>
+    </div>
+
+    <!-- Hidden Venner Window -->
+    <div class="modal-window venner-window" id="vennerWindow">
+        <h2>Venner</h2>
+        <p>Inviter dine venner.</p>
+        <p>Facebook, Insta, Treads</p>
+        <button id="closeVenner">Close</button>
+    </div>
+
+    <script>
+
+        //high score 
+        document.getElementById("scoreButton").addEventListener("click", function() {
+        document.getElementById("scoreWindow").style.display = "block";
+    });
+
+        document.getElementById("closeScore").addEventListener("click", function() {
+        document.getElementById("scoreWindow").style.display = "none";
+    });
+
+    
+     // setting
+        document.getElementById("settingsButton").addEventListener("click", function() {
+        document.getElementById("settingsWindow").style.display = "block";
+    });
+
+        document.getElementById("closeSettings").addEventListener("click", function() {
+        document.getElementById("settingsWindow").style.display = "none";
+    });
+    
+     // profil
+     document.getElementById("profilButton").addEventListener("click", function() {
+        document.getElementById("profilWindow").style.display = "block";
+    });
+
+        document.getElementById("closeProfil").addEventListener("click", function() {
+        document.getElementById("profilWindow").style.display = "none";
+    });
+
+        
+//venner
+    document.getElementById("vennerButton").addEventListener("click", function() {
+        document.getElementById("vennerWindow").style.display = "block";
+    });
+
+        document.getElementById("closeVenner").addEventListener("click", function() {
+        document.getElementById("vennerWindow").style.display = "none";
+    });
+
+ 
+
+    
+    document.addEventListener("DOMContentLoaded", function () {
+    let life = localStorage.getItem("life") ? parseInt(localStorage.getItem("life")) : 5;
+    let lifeDepletedAt = localStorage.getItem("lifeDepletedAt");
+
+    let lifeCounter = document.getElementById("lifeCounter");
+    let timerDisplay = document.createElement("p");
+    timerDisplay.id = "timer";
+    lifeCounter.parentNode.appendChild(timerDisplay);
+
+    function updateTimer() {
+        if (life >= 5) {
+            timerDisplay.textContent = "Life Full";
+            localStorage.removeItem("lifeDepletedAt"); // Remove timer when full
+            return;
+        }
+
+        if (lifeDepletedAt) {
+            let elapsedTime = (Date.now() - parseInt(lifeDepletedAt)) / 1000; // Convert to seconds
+            let remainingTime = 20 - elapsedTime; // (Change to 14400 for 4 hours)
+
+            if (remainingTime <= 0) {
+                life = Math.min(5, life + 1); // Increase life by 1, max 5
+                localStorage.setItem("life", life);
+                localStorage.setItem("lifeDepletedAt", Date.now()); // Reset timer
+
+                if (life >= 5) {
+                    localStorage.removeItem("lifeDepletedAt");
+                }
+            }
+
+            let hours = Math.floor(remainingTime / 3600);
+            let minutes = Math.floor((remainingTime % 3600) / 60);
+            let seconds = Math.floor(remainingTime % 60);
+            timerDisplay.textContent = `Next life in: ${hours}h ${minutes}m ${seconds}s`;
+        }
+
+        lifeCounter.textContent = life;
+    }
+
+    setInterval(updateTimer, 1000);
+    updateTimer();
+});
+
+    </script>
+</body>
+</html>

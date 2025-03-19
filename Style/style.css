@@ -1,0 +1,45 @@
+*{
+    font-family: 'Times New Roman', Times, serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .container img {
+    width: 100%;
+    height: auto;
+    margin-top: 10vh;
+  }
+  
+  .container .btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: none;
+    background: linear-gradient(45deg, #ff4d00, #ff9000);
+    font-size: 18px;
+    padding: 16px 30px;
+    border: none;
+    cursor: pointer;
+    border-radius: 50px;
+    text-align: center;
+    margin-top: 7%;
+    color: beige;
+  }
+  
+  .container .btn:hover {
+    background-color: black;
+    color: white;
+  }
+
